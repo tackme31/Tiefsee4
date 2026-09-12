@@ -822,6 +822,21 @@ export class MainWindow {
             } else if (args.length === 1) {
                 if (args[0] === "") {
                     _fileShow.openWelcome();
+                } else if (/^https?:\/\//i.test(args[0])) {
+                    // 命令列傳入網址：先下載圖片到本機暫存檔，再依一般流程載入
+                    const file = await downloadFileFromUrl(WebAPI.forwardGet(args[0]));
+                    if (file != null) {
+                        const base64 = await Lib.readFileAsDataURL(file);
+                        const extension = await Lib.getExtensionFromBase64(base64); // 取得副檔名
+                        if (extension !== "") {
+                            const path = await WV_File.Base64ToTempFile(base64, extension);
+                            await _fileLoad.loadFile(path); // 載入單張圖片
+                        } else {
+                            _fileShow.openWelcome();
+                        }
+                    } else {
+                        _fileShow.openWelcome();
+                    }
                 } else {
                     await _fileLoad.loadFile(args[0]); // 載入單張圖片
                 }
