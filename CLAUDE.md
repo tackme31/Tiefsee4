@@ -59,6 +59,10 @@ Run `gulp build` in `Www/` first, then build `BuildAll` with Visual Studio's MSB
 
 This builds Tiefsee (Release) + TiefseeNativeHost into `Output/`, removes pdb/BuildAll leftovers, and zips the whole `Output/` folder to `Tiefsee.zip` at the repository root (ignored by git). Stale files in `Output/` are included in the zip as-is, so delete everything in `Output/` except `Www/` beforehand if the layout may have changed.
 
+- `InvokeMsBuild.ps1` does not restore NuGet packages. On a fresh clone or after deleting `obj/`, run `dotnet restore BuildAll/BuildAll.csproj -p:Platform=x64` and `dotnet restore Tiefsee/Tiefsee.csproj -p:Platform=x64` first.
+- Before packaging, check that `Output/Www/` is populated (`js/`, `css/`, `MainWindow.html`, `img/logo.ico`). If it is missing, the app crashes on startup with `FileNotFoundException: ...\Www\img\logo.ico`. Re-run `gulp build`.
+- Older versions of `Tiefsee.csproj` included `Output/Www/**` as Content. A stale `Tiefsee/obj/` from such a build makes MSBuild's IncrementalClean delete the files in `Output/Www/`. If they disappear after a C# build, delete `Tiefsee/obj/` and run `gulp build` again.
+
 ## Architecture
 
 ### C# Layer (`Tiefsee/`)
