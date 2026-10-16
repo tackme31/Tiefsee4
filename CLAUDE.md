@@ -47,6 +47,18 @@ Open `Tiefsee4.sln` in Visual Studio and build normally, or use `dotnet build Ti
 
 `TiefseeNativeHost` is a C++ project (MSVC v143, x64); build it from Visual Studio or MSBuild. See `Building.md` for the required toolset.
 
+> `dotnet build` cannot build the C++ native host — it silently skips it (prints "NativeHost 未重新編譯"), so `Output/Tiefsee.exe` is not produced/updated. Use Visual Studio's MSBuild via `BuildAll/InvokeMsBuild.ps1` whenever `Tiefsee.exe` is needed.
+
+### Release package (zip)
+
+Run `gulp build` in `Www/` first, then build `BuildAll` with Visual Studio's MSBuild (from the repo root, PowerShell):
+
+```powershell
+.\BuildAll\InvokeMsBuild.ps1 -Project .\BuildAll\BuildAll.csproj -Target Build   # Release|x64 by default
+```
+
+This builds Tiefsee (Release) + TiefseeNativeHost into `Output/`, removes pdb/BuildAll leftovers, and zips the whole `Output/` folder to `Tiefsee.zip` at the repository root (ignored by git). Stale files in `Output/` are included in the zip as-is, so delete everything in `Output/` except `Www/` beforehand if the layout may have changed.
+
 ## Architecture
 
 ### C# Layer (`Tiefsee/`)
