@@ -214,6 +214,8 @@ body[toolbarHoverMode="true"]:not([fullScreen="true"]) {
         right: 0;
         z-index: 50;
         visibility: hidden;
+        // 画像の上に重なるため、明るい画像でもアイコンが見えるよう半透明の背景を敷く
+        background-color: var(--color-black60);
     }
 }
 
