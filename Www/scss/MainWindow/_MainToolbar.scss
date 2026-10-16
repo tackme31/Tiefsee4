@@ -203,3 +203,24 @@
 }
 
 /* #endregion */
+
+/* #region ホバー表示モード（mainToolbarEnabled = false 時） */
+
+body[toolbarHoverMode="true"]:not([fullScreen="true"]) {
+    .main-T {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 50;
+        visibility: hidden;
+    }
+}
+
+body[toolbarHoverMode="true"][toolbarHovered="true"]:not([fullScreen="true"]) {
+    .main-T {
+        visibility: visible;
+    }
+}
+
+/* #endregion */

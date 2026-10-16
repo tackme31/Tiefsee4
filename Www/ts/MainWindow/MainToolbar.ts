@@ -23,6 +23,7 @@ export class MainToolbar {
         this.getArrray = getArrray;
 
         init();
+        initHoverListener();
 
         //-----------------
 
@@ -86,11 +87,29 @@ export class MainToolbar {
         function setEnabled(val: boolean) {
             if (M == null) { return; }
             if (val) {
-                M.domToolbar.style.display = "";
+                document.body.removeAttribute("toolbarHoverMode");
             } else {
-                M.domToolbar.style.display = "none";
+                document.body.setAttribute("toolbarHoverMode", "true");
+                document.body.removeAttribute("toolbarHovered");
             }
             M.config.settings.layout.mainToolbarEnabled = val;
+        }
+
+        /**
+         * ホバーモード用のマウスリスナーを初期化
+         */
+        function initHoverListener() {
+            if (M == null) { return; }
+            document.body.addEventListener("mousemove", (e) => {
+                if (document.body.getAttribute("toolbarHoverMode") !== "true") { return; }
+                if (document.body.getAttribute("fullScreen") === "true") { return; }
+                const rect = M!.domToolbar.getBoundingClientRect();
+                if (e.clientY >= rect.top && e.clientY <= rect.bottom) {
+                    document.body.setAttribute("toolbarHovered", "true");
+                } else if (e.clientY > rect.bottom + 10) {
+                    document.body.removeAttribute("toolbarHovered");
+                }
+            });
         }
 
         /**
