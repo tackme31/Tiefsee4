@@ -33,3 +33,8 @@ TiefseeNativeHost/obj
 
 Tiefsee.zip
 *.user
+
+# Local tool settings
+/.claude/settings.local.json
+/.serena/
+*.stackdump
